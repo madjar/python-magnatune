@@ -22,6 +22,9 @@ def main():
                         choices=FORMATS.keys(),
                         help='Output the streaming url of the track. Takes an '
                              'optional argument to determine the format.')
+    parser.add_argument('--login', '-l',
+                        help='The magnatune login and password in the '
+                        '"login:passwd" format')
 
     group = parser.add_argument_group('Search arguments')
     group.add_argument('--artist', '-a', help='Filter by artist name.')
@@ -42,7 +45,8 @@ def main():
                                            magnatunegenres=args.genre,
                                            artistdesc=args.artistdesc):
         if args.stream:
+            format = FORMATS[args.stream]
             for t in a.Track:
-                print(t.find(FORMATS[args.stream]))
+                print(magnatune.search.stream_url(t, format, args.login))
         else:
             print(a.albumname, 'by', a.artist)

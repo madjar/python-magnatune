@@ -17,3 +17,16 @@ def search_album(**kw):
                 break
         else:
             yield a
+
+
+def auth_url(url, login):
+    return (url.replace('http://he3', 'http://{}@download'.format(login))
+            .replace('.mp3', '_nospeech.mp3').replace('.ogg', '_nospeech.ogg'))
+
+
+def stream_url(track, format, login):
+     url = str(track.find(format))
+     if login:
+        return auth_url(url, login)
+     else:
+         return url
