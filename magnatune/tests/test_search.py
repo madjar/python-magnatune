@@ -12,8 +12,8 @@ class TestSearchAlbum(unittest.TestCase):
         album = mock.Mock()
         self.db.getroot().Album = [album]
 
-        album.find().text = mock.MagicMock()
-        album.find().text.__contains__.return_value = True
+        album.find().text.lower.return_value = mock.MagicMock()
+        album.find().text.lower().__contains__.return_value = True
 
         attrs = ('artist', 'albumname', 'magnatunegenres', 'artistdesc')
         call = {att: att + 'called' for att in attrs}
@@ -21,7 +21,7 @@ class TestSearchAlbum(unittest.TestCase):
         from magnatune.search import search_album
         list(search_album(**call))
 
-        self.assertEqual(album.find().text.__contains__.call_args_list,
+        self.assertEqual(album.find().text.lower().__contains__.call_args_list,
             [((value,), {}) for value in call.values()])
 
     def test_wrong_arg(self):
