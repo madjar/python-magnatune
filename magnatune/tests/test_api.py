@@ -67,11 +67,3 @@ class TestXMLDownload(unittest.TestCase):
         self.urlopen.assert_called_once_with(CRC_URL)
         self.assertEqual(self.dbm['crc'], self.server_crc)
         self.assertEqual(self.dbm['updated'], str(self.server_time))
-
-
-class TestDownload(unittest.TestCase):
-    @mock.patch('urllib.request.urlretrieve')
-    def test_download(self, urlretrieve):
-        from magnatune.api import download, ALBUM_INFO_URL, album_info_file
-        download()
-        urlretrieve.assert_called_once_with(ALBUM_INFO_URL, album_info_file)

@@ -16,14 +16,16 @@ CRC_URL = 'http://he3.magnatune.com/info/changed.txt'
 ALBUM_INFO_URL = 'http://he3.magnatune.com/info/album_info_xml.bz2'
 
 db_file = os.path.join(config_dir, 'api.db')
-album_info_file = os.path.join(config_dir, 'album_info_xml.bz2')
+album_info_file = os.path.join(config_dir, 'album_info.xml')
 
 
 def download():
     """
     Downloads the last version of the api file from the server.
     """
-    urllib.request.urlretrieve(ALBUM_INFO_URL, album_info_file)
+    source = urllib.request.urlopen(ALBUM_INFO_URL)
+    with open(album_info_file, 'wb') as f:
+        f.write(bz2.decompress(source.read()))
 
 
 def update_if_needed():
@@ -65,5 +67,5 @@ def get_database():
     global _db
     if not _db:
         update_if_needed()
-        _db = lxml.objectify.parse(bz2.BZ2File(album_info_file))
+        _db = lxml.objectify.parse(album_info_file)
     return _db
