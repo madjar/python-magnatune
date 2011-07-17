@@ -42,6 +42,7 @@ def update_if_needed():
         crc = db.get('crc', None)
         logger.debug('Updating CRC file')
         new_crc = urllib.request.urlopen(CRC_URL).read()
+        db['updated'] = str(time.time())
         if crc == new_crc:
             logger.info('Database file up-to-date.')
             return
@@ -49,7 +50,6 @@ def update_if_needed():
         logger.info('Updating database file.')
         download()
         db['crc'] = new_crc
-        db['updated'] = str(time.time())
     finally:
         db.close()
 

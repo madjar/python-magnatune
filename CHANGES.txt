@@ -1,0 +1,10 @@
+Next release
+------------
+
+- Added a new option, "--login", to use a subscription login when streaming.
+- Bugfix : download the CRC file only when needed.
+
+0.1
+---
+
+- Initial release
