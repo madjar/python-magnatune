@@ -19,10 +19,11 @@ def main():
     parser.add_argument('--verbose', '-v', action='append_const',
                         const=None, default=[],
                         help='Print informative output. Twice for debug.')
-    parser.add_argument('--stream', '-s', nargs='?', const='ogg',
+    parser.add_argument('--stream', '-s', action='store_true',
+                        help='Output the streaming url of the track.')
+    parser.add_argument('--format', '-f', nargs='?', default='ogg',
                         choices=FORMATS.keys(),
-                        help='Output the streaming url of the track. Takes an '
-                             'optional argument to determine the format.')
+                        help='The format to use for streaming url.')
     parser.add_argument('--login', '-l',
                         help='The magnatune login and password in the '
                         '"login:passwd" format')
@@ -46,7 +47,7 @@ def main():
                                            magnatunegenres=args.genre,
                                            artistdesc=args.artistdesc):
         if args.stream:
-            format = FORMATS[args.stream]
+            format = FORMATS[args.format]
             for t in a.Track:
                 print(magnatune.search.stream_url(t, format, args.login))
         else:

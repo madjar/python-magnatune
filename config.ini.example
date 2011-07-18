@@ -1,6 +1,6 @@
 [default]
 % Streaming format, one of : ogg, mp3 or mp3lofi
-% stream = ogg
+% format = ogg
 
 % Magnatune subscription login, of the for login:passwd
 % login = login:passwd
