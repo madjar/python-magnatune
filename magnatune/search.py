@@ -1,4 +1,12 @@
+import logging
+import urllib.request
+import webbrowser
+import lxml.etree
 import magnatune.api
+
+
+logger = logging.getLogger(__name__)
+
 
 HANDLED_ALBUM_ATTRS = {'artist', 'albumname', 'magnatunegenres', 'artistdesc'}
 
@@ -30,3 +38,29 @@ def stream_url(track, format, login):
         return auth_url(url, login)
      else:
          return url
+
+
+def download(sku, format, login):
+    user, pwd = login.split(':')
+    password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+    password_manager.add_password(None, 'https://download.magnatune.com', user, pwd)
+    auth_manager = urllib.request.HTTPBasicAuthHandler(password_manager)
+    opener = urllib.request.build_opener(auth_manager)
+
+    url = ("http://download.magnatune.com/buy/"
+           "membership_free_dl_xml?id=python&sku={}".format(sku))
+    logger.debug("Downloading %s", url)
+    content = opener.open(url).read()
+    content = content.replace(b'<br>', b'')  # Workaround because the xml is malformated
+    response = lxml.etree.fromstring(content)
+
+    if format == 'web':
+        url = response.find('DL_PAGE').text
+        print(url)
+        webbrowser.open(url)
+    else:
+        urlzip = response.find('URL_{}ZIP'.format(format.upper()))
+        if urlzip is None:
+            raise Exception('Unknown download format : %s' % format)
+        print(urlzip.text)
+        # TODO : download the zip file, and maybe even decompress

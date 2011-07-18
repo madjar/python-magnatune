@@ -21,6 +21,10 @@ def main():
     parser.add_argument('--format', '-f', nargs='?', default='ogg',
                         choices=FORMATS.keys(),
                         help='The format to use for streaming url.')
+    parser.add_argument('--download', '-d', action='store_true')
+    parser.add_argument('--dlformat', nargs='?', default='web',
+                        choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
+                        help='The format to use for streaming url.')
     parser.add_argument('--login', '-l',
                         help='The magnatune login and password in the '
                         '"login:passwd" format')
@@ -29,8 +33,7 @@ def main():
     group = parser.add_argument_group('Search arguments')
     group.add_argument('--artist', '-a', help='Filter by artist name.')
     group.add_argument('--albumname', '-n', help='Filter by album name.')
-    group.add_argument('--artistdesc', '-d',
-                       help='Filter by artist description.')
+    group.add_argument('--artistdesc', help='Filter by artist description.')
     group.add_argument('--genre', '-g', help='Filter by genre.')
 
     args = magnatune.config.ConfigArgs(parser.parse_args())
@@ -46,6 +49,9 @@ def main():
     if not (args.artist or args.albumname or args.genre or args.artistdesc):
         parser.error('no search filter given')
 
+    if args.download and not args.login:
+        parser.error('cannot download an album without subscription login')
+
     for a in magnatune.search.search_album(artist=args.artist,
                                            albumname=args.albumname,
                                            magnatunegenres=args.genre,
@@ -54,5 +60,7 @@ def main():
             format = FORMATS[args.format]
             for t in a.Track:
                 print(magnatune.search.stream_url(t, format, args.login))
+        elif args.download:
+            magnatune.search.download(a.albumsku, args.dlformat, args.login)
         else:
             print(a.albumname, 'by', a.artist)
