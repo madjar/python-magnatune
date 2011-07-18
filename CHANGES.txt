@@ -3,6 +3,7 @@ Next release
 
 - Added a new option, "--login", to use a subscription login when streaming.
 - Decompress the database file on download to save some time afterward.
+- Config file support.
 - Bugfix : download the CRC file only when needed.
 
 0.1

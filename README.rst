@@ -15,6 +15,10 @@ The result can be user with mpc, for example to add all those songs to mpd ::
 
     magnatune --artist Curl --stream | mpc add
 
+Config file
+===========
+``python-magnatune`` looks for default values of all arguments in the config file ``~/.python-magnatune/config.ini``. See ``config.ini.example`` for more information.
+
 Contribute
 ==========
 

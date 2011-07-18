@@ -1,6 +1,7 @@
 import argparse
 import logging
 import magnatune.search
+import magnatune.config
 
 FORMATS = {'ogg': 'oggurl',
            'mp3': 'url',
@@ -33,7 +34,7 @@ def main():
                        help='Filter by artist description.')
     group.add_argument('--genre', '-g', help='Filter by genre.')
 
-    args = parser.parse_args()
+    args = magnatune.config.ConfigArgs(parser.parse_args())
 
     logging.basicConfig(level=get_log_level(args))
 
