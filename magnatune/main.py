@@ -8,17 +8,14 @@ FORMATS = {'ogg': 'oggurl',
            'mp3lofi': 'mp3lofi'}
 
 
-def get_log_level(args):
-    return ({0: logging.WARN, 1: logging.INFO}
-                 .get(len(args.verbose), logging.DEBUG))
-
-
 def main():
     parser = argparse.ArgumentParser(description="Search an album.")
 
-    parser.add_argument('--verbose', '-v', action='append_const',
-                        const=None, default=[],
-                        help='Print informative output. Twice for debug.')
+    verbose = parser.add_mutually_exclusive_group()
+    verbose.add_argument('--verbose', '-v', action='store_true',
+                         help='Print informative output.')
+    verbose.add_argument('--quiet', '-q', action='store_true',
+                         help='Supress all non-warning informational output.')
     parser.add_argument('--stream', '-s', action='store_true',
                         help='Output the streaming url of the track.')
     parser.add_argument('--format', '-f', nargs='?', default='ogg',
@@ -27,6 +24,7 @@ def main():
     parser.add_argument('--login', '-l',
                         help='The magnatune login and password in the '
                         '"login:passwd" format')
+
 
     group = parser.add_argument_group('Search arguments')
     group.add_argument('--artist', '-a', help='Filter by artist name.')
@@ -37,7 +35,13 @@ def main():
 
     args = magnatune.config.ConfigArgs(parser.parse_args())
 
-    logging.basicConfig(level=get_log_level(args))
+    if args.verbose:
+        loglevel = logging.DEBUG
+    elif args.quiet:
+        loglevel = logging.WARN
+    else:
+        loglevel = logging.INFO
+    logging.basicConfig(level=loglevel)
 
     if not (args.artist or args.albumname or args.genre or args.artistdesc):
         parser.error('no search filter given')

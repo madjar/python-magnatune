@@ -4,3 +4,9 @@
 
 % Magnatune subscription login, of the for login:passwd
 % login = login:passwd
+
+% Display debug informations
+% verbose = 1
+
+% Display nothing but the requested output (and warnings)
+% quiet = 1

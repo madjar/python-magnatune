@@ -37,16 +37,16 @@ def update_if_needed():
     try:
         updated = float(db.get('updated', 0))
         if time.time() - updated < 60 * 60 * 24:  #24 hours
-            logger.info(
+            logger.debug(
                 'Database file updated less than 24 hours, not updating.')
             return
 
         crc = db.get('crc', None)
-        logger.debug('Updating CRC file')
+        logger.info('Updating CRC file')
         new_crc = urllib.request.urlopen(CRC_URL).read()
         db['updated'] = str(time.time())
         if crc == new_crc:
-            logger.info('Database file up-to-date.')
+            logger.debug('Database file up-to-date.')
             return
 
         logger.info('Updating database file.')
