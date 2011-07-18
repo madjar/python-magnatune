@@ -16,12 +16,13 @@ def main():
                          help='Print informative output.')
     verbose.add_argument('--quiet', '-q', action='store_true',
                          help='Supress all non-warning informational output.')
-    parser.add_argument('--stream', '-s', action='store_true',
+    action = parser.add_mutually_exclusive_group()
+    action.add_argument('--stream', '-s', action='store_true',
                         help='Output the streaming url of the track.')
     parser.add_argument('--format', '-f', nargs='?', default='ogg',
                         choices=FORMATS.keys(),
                         help='The format to use for streaming url.')
-    parser.add_argument('--download', '-d', action='store_true')
+    action.add_argument('--download', '-d', action='store_true')
     parser.add_argument('--dlformat', nargs='?', default='web',
                         choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
                         help='The format to use for streaming url.')

@@ -1,3 +1,4 @@
+import sys
 import logging
 import urllib.request
 import webbrowser
@@ -41,12 +42,14 @@ def stream_url(track, format, login):
 
 
 def download(sku, format, login):
+    # Preparation for the login
     user, pwd = login.split(':')
     password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     password_manager.add_password(None, 'https://download.magnatune.com', user, pwd)
     auth_manager = urllib.request.HTTPBasicAuthHandler(password_manager)
     opener = urllib.request.build_opener(auth_manager)
 
+    # Download of the information file
     url = ("http://download.magnatune.com/buy/"
            "membership_free_dl_xml?id=python&sku={}".format(sku))
     logger.debug("Downloading %s", url)
@@ -62,5 +65,28 @@ def download(sku, format, login):
         urlzip = response.find('URL_{}ZIP'.format(format.upper()))
         if urlzip is None:
             raise Exception('Unknown download format : %s' % format)
-        print(urlzip.text)
-        # TODO : download the zip file, and maybe even decompress
+
+        filename = urlzip.text.split('/')[-1]
+        logger.debug("Downloading %s", urlzip.text)
+        with opener.open(urlzip.text) as source, open(filename, 'wb') as dest:
+            headers = source.info()
+            width = 32
+            bs = 1024*8
+            blocknum = 0
+            size = int(headers.get("Content-Length", -1))
+            output = logging.INFO >= logger.getEffectiveLevel()
+            while 1:
+                block = source.read(bs)
+                if not block:
+                    break
+                dest.write(block)
+                blocknum += 1
+                if output and blocknum % 16 == 0:
+                    cur = blocknum * bs
+                    x = width * (cur+1) // size
+                    bar = '{} [{}{}] {}/{}\r'.format(filename, '='*x,
+                                                     '-'*(width-x), cur, size)
+                    sys.stderr.write(bar)
+                    sys.stderr.flush()
+            if output:
+                sys.stderr.write('\n')
