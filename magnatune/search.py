@@ -14,7 +14,7 @@ HANDLED_ALBUM_ATTRS = {'artist', 'albumname', 'magnatunegenres', 'artistdesc'}
 
 
 def search_album(**kw):
-    """Search for albums matching the arguments."""
+    """Searchs for albums matching the arguments."""
     if not HANDLED_ALBUM_ATTRS.issuperset(kw):
         raise TypeError(
             'unhandled search on attributes : {0}'
@@ -30,11 +30,13 @@ def search_album(**kw):
 
 
 def auth_url(url, login):
+    """Adds authentification to a streaming url"""
     return (url.replace('http://he3', 'http://{}@download'.format(login))
             .replace('.mp3', '_nospeech.mp3').replace('.ogg', '_nospeech.ogg'))
 
 
 def stream_url(track, format, login):
+     """Returns a streaming url for given track, in given format with given login."""
      url = str(track.find(format))
      if login:
         return auth_url(url, login)
@@ -43,6 +45,9 @@ def stream_url(track, format, login):
 
 
 def download(sku, format, extract, login):
+    """Downloads the album with given sku id in given format, with given login.
+
+    If extract is not empty, also extract to the given path."""
     # Preparation for the login
     user, pwd = login.split(':')
     password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
