@@ -2,6 +2,7 @@ import sys
 import logging
 import urllib.request
 import webbrowser
+import zipfile
 import lxml.etree
 import magnatune.api
 
@@ -41,7 +42,7 @@ def stream_url(track, format, login):
          return url
 
 
-def download(sku, format, login):
+def download(sku, format, extract, login):
     # Preparation for the login
     user, pwd = login.split(':')
     password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
@@ -92,3 +93,7 @@ def download(sku, format, login):
                     sys.stderr.flush()
             if output:
                 sys.stderr.write('\n')
+
+        if extract:
+            logger.info("Extracting %s", filename)
+            zipfile.ZipFile(filename).extractall(path=extract)

@@ -26,6 +26,7 @@ def main():
     parser.add_argument('--dlformat', nargs='?', default='web',
                         choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
                         help='The format to use for streaming url.')
+    parser.add_argument('--extract', '-e', nargs='?', const='.')
     parser.add_argument('--login', '-l',
                         help='The magnatune login and password in the '
                         '"login:passwd" format')
@@ -62,6 +63,6 @@ def main():
             for t in a.Track:
                 print(magnatune.search.stream_url(t, format, args.login))
         elif args.download:
-            magnatune.search.download(a.albumsku, args.dlformat, args.login)
+            magnatune.search.download(a.albumsku, args.dlformat, args.extract, args.login)
         else:
             print(a.albumname, 'by', a.artist)

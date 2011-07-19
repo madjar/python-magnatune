@@ -6,7 +6,7 @@ Next release
 - Config file support.
 - Split the "--stream" option into "--stream" that specify whether to stream or not, and "--format" to specify the format.
 - Changed the verbose argument and added a quiet argument.
-- Added an option to download albums.
+- Added an option to download and extract albums.
 - Bugfix : download the CRC file only when needed.
 
 0.1
