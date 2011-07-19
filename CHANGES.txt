@@ -1,15 +1,26 @@
 Next release
-------------
+============
 
-- Added a new option, "--login", to use a subscription login when streaming.
-- Decompress the database file on download to save some time afterward.
+Features
+--------
+
+- Albums download and extraction.
+- New option, "--login", to use a subscription login when streaming.
 - Config file support.
+
+Changes
+-------
+
+- Decompress the database file on download to save some time afterward.
 - Split the "--stream" option into "--stream" that specify whether to stream or not, and "--format" to specify the format.
 - Changed the verbose argument and added a quiet argument.
-- Added an option to download and extract albums.
+
+Bugfix
+------
+
 - Bugfix : download the CRC file only when needed.
 
 0.1
----
+===
 
 - Initial release
