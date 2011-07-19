@@ -83,9 +83,11 @@ def download(sku, format, login):
                 blocknum += 1
                 if output and blocknum % 16 == 0:
                     cur = blocknum * bs
-                    x = width * (cur+1) // size
-                    bar = '{} [{}{}] {}/{}\r'.format(filename, '='*x,
-                                                     '-'*(width-x), cur, size)
+                    x = (width + 1) * cur // size
+                    bar = '{} [{}{}] {:.1f}/{:.1f}\r'.format(filename, '='*x,
+                                                             '-'*(width-x),
+                                                             cur/(1024*1024),
+                                                             size/(1024*1024))
                     sys.stderr.write(bar)
                     sys.stderr.flush()
             if output:
