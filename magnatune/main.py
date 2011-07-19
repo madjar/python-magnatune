@@ -16,27 +16,36 @@ def main():
                          help='Print informative output.')
     verbose.add_argument('--quiet', '-q', action='store_true',
                          help='Supress all non-warning informational output.')
+
     action = parser.add_mutually_exclusive_group()
     action.add_argument('--stream', '-s', action='store_true',
                         help='Output the streaming url of the track.')
-    parser.add_argument('--format', '-f', nargs='?', default='ogg',
+
+    stream = parser.add_argument_group('Streaming options')
+    stream.add_argument('--format', '-f', nargs='?', default='ogg',
                         choices=FORMATS.keys(),
                         help='The format to use for streaming url.')
-    action.add_argument('--download', '-d', action='store_true')
-    parser.add_argument('--dlformat', nargs='?', default='web',
+
+    action.add_argument('--download', '-d', action='store_true',
+                        help='Download the albums')
+
+    download = parser.add_argument_group('Download options')
+    download.add_argument('--dlformat', nargs='?', default='web',
                         choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
-                        help='The format to use for streaming url.')
-    parser.add_argument('--extract', '-e', nargs='?', const='.')
+                        help='The format to use for downloading albums.')
+    download.add_argument('--extract', '-e', nargs='?', const='.',
+                        help='Extract downloaded albums to path (. by default).')
+
     parser.add_argument('--login', '-l',
                         help='The magnatune login and password in the '
                         '"login:passwd" format')
 
 
-    group = parser.add_argument_group('Search arguments')
-    group.add_argument('--artist', '-a', help='Filter by artist name.')
-    group.add_argument('--albumname', '-n', help='Filter by album name.')
-    group.add_argument('--artistdesc', help='Filter by artist description.')
-    group.add_argument('--genre', '-g', help='Filter by genre.')
+    search = parser.add_argument_group('Search arguments')
+    search.add_argument('--artist', '-a', help='Filter by artist name.')
+    search.add_argument('--albumname', '-n', help='Filter by album name.')
+    search.add_argument('--artistdesc', help='Filter by artist description.')
+    search.add_argument('--genre', '-g', help='Filter by genre.')
 
     args = magnatune.config.ConfigArgs(parser.parse_args())
 
