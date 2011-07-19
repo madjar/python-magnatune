@@ -27,6 +27,18 @@ Of course, there is a short version. With the ``login`` and ``dlformat`` set in 
 
     magnatune -a Curl -de
 
+Install
+=======
+
+``python-magnatune`` requires python 3. I strongly recommend that you use `virtualenv`_. With virtualenv installed, you can install python-magnatune by doing ::
+
+	pip install magnatune
+
+To work with the development version, clone the repository at https://github.com/madjar/python-magnatune and do ::
+
+	pip install -e .
+
+
 Config file
 ===========
 ``python-magnatune`` looks for default values of all arguments in the config file ``~/.python-magnatune/config.ini``. See ``config.ini.example`` for more information.
@@ -47,3 +59,4 @@ Credits
 .. _`magnatune`: http://magnatune.com/
 .. _`github`: https://github.com/madjar/python-magnatune
 .. _`report`: https://github.com/madjar/python-magnatune/issues
+.. _`virtualenv`: http://www.virtualenv.org/
