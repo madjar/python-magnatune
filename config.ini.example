@@ -2,11 +2,14 @@
 % Streaming format, one of : ogg, mp3 or mp3lofi
 % format = ogg
 
+% Download format, one of : web, wav, 128kmp3, ogg, vbr, flac
+% dlformat = web
+
+% Always extract to given folder after download
+% extract = .
+
 % Magnatune subscription login, of the for login:passwd
 % login = login:passwd
 
 % Display debug informations
 % verbose = 1
-
-% Display nothing but the requested output (and warnings)
-% quiet = 1

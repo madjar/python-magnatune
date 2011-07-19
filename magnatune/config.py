@@ -15,6 +15,8 @@ def check_config_dir():
 
 
 class ConfigArgs:
+    AUTHORIZED_OPTIONS = ('verbose', 'format', 'dlformat', 'login', 'extract')
+
     def __init__(self, args):
         self.args = args
         self.config = configparser.ConfigParser()
@@ -23,8 +25,14 @@ class ConfigArgs:
         except configparser.Error as e:
             logger.warning("Error while reading the config file, ignoring :\n%s", e)
 
+        for option in self.config['default']:
+            if option not in ConfigArgs.AUTHORIZED_OPTIONS:
+                logger.warning('Option "%s" in config file will be ignore', option)
+
     def __getattr__(self, item):
         try:
-            return self.config['default'][item]
+            if item in ConfigArgs.AUTHORIZED_OPTIONS:
+                return self.config['default'][item]
         except KeyError:
-            return getattr(self.args, item)
+            pass
+        return getattr(self.args, item)
