@@ -15,6 +15,18 @@ The result can be user with mpc, for example to add all those songs to mpd ::
 
     magnatune --artist Curl --stream | mpc add
 
+If you have a subscription login and want to hear the music without ads, you can use it ::
+
+    magnatune --artist Curl --login login:passwd
+
+You can also download albums. This will download all the albums of curl, and extract them to the current dir ::
+
+    magnatune --artist Curl --login login:passwd --download --dlformat ogg --extract
+
+Of course, there is a short version. With the ``login`` and ``dlformat`` set in my config file, I just do ::
+
+    magnatune -a Curl -de
+
 Config file
 ===========
 ``python-magnatune`` looks for default values of all arguments in the config file ``~/.python-magnatune/config.ini``. See ``config.ini.example`` for more information.
