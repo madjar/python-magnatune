@@ -22,15 +22,14 @@ def main():
                         help='Output the streaming url of the track.')
 
     stream = parser.add_argument_group('Streaming options')
-    stream.add_argument('--format', '-f', nargs='?', default='ogg',
-                        choices=FORMATS.keys(),
+    stream.add_argument('--format', '-f', nargs='?', choices=FORMATS.keys(),
                         help='The format to use for streaming url.')
 
     action.add_argument('--download', '-d', action='store_true',
                         help='Download the albums')
 
     download = parser.add_argument_group('Download options')
-    download.add_argument('--dlformat', nargs='?', default='web',
+    download.add_argument('--dlformat', nargs='?',
                         choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
                         help='The format to use for downloading albums.')
     download.add_argument('--extract', '-e', nargs='?', const='.',

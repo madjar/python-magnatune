@@ -35,8 +35,10 @@ def auth_url(url, login):
             .replace('.mp3', '_nospeech.mp3').replace('.ogg', '_nospeech.ogg'))
 
 
-def stream_url(track, format, login):
+def stream_url(track, format=None, login=None):
      """Returns a streaming url for given track, in given format with given login."""
+     if not format:
+         format = 'ogg'
      url = str(track.find(format))
      if login:
         return auth_url(url, login)
@@ -44,10 +46,12 @@ def stream_url(track, format, login):
          return url
 
 
-def download(sku, format, extract, login):
+def download(sku, format=None, extract=False, login=None):
     """Downloads the album with given sku id in given format, with given login.
 
     If extract is not empty, also extract to the given path."""
+    if not format:
+        format = 'web'
     # Preparation for the login
     user, pwd = login.split(':')
     password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()

@@ -30,9 +30,11 @@ class ConfigArgs:
                 logger.warning('Option "%s" in config file will be ignore', option)
 
     def __getattr__(self, item):
-        try:
-            if item in ConfigArgs.AUTHORIZED_OPTIONS:
-                return self.config['default'][item]
-        except KeyError:
-            pass
-        return getattr(self.args, item)
+        arg = getattr(self.args, item)
+        if not arg:
+            try:
+                if item in ConfigArgs.AUTHORIZED_OPTIONS:
+                    arg = self.config['default'][item]
+            except KeyError:
+                pass
+        return arg
