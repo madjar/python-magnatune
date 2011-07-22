@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="magnatune",
-    version="0.1",
+    version="0.2",
     packages=find_packages(),
 
     author="Georges Dubus",
@@ -18,7 +18,7 @@ setup(
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: End Users/Desktop",
