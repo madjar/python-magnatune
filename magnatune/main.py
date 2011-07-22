@@ -26,7 +26,7 @@ def main():
                         help='The format to use for streaming url.')
 
     action.add_argument('--download', '-d', action='store_true',
-                        help='Download the albums')
+                        help='Download the albums.')
 
     download = parser.add_argument_group('Download options')
     download.add_argument('--dlformat', nargs='?',
@@ -37,7 +37,7 @@ def main():
 
     parser.add_argument('--login', '-l',
                         help='The magnatune login and password in the '
-                        '"login:passwd" format')
+                        '"login:passwd" format.')
 
 
     search = parser.add_argument_group('Search arguments')
@@ -73,4 +73,4 @@ def main():
         elif args.download:
             magnatune.search.download(a.albumsku, args.dlformat, args.extract, args.login)
         else:
-            print(a.albumname, 'by', a.artist)
+            print(a.artist, '--', a.albumname)

@@ -1,3 +1,4 @@
 include README.rst
 include COPYING.txt
 include CHANGES.txt
+include config.ini.example

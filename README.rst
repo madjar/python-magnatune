@@ -17,7 +17,7 @@ The result can be user with mpc, for example to add all those songs to mpd ::
 
 If you have a subscription login and want to hear the music without ads, you can use it ::
 
-    magnatune --artist Curl --login login:passwd
+    magnatune --artist Curl --login login:passwd --stream
 
 You can also download albums. This will download all the albums of curl, and extract them to the current dir ::
 

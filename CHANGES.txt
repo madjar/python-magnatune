@@ -14,9 +14,10 @@ Changes
 - Decompress the database file on download to save some time afterward.
 - Split the "--stream" option into "--stream" that specify whether to stream or not, and "--format" to specify the format.
 - Changed the verbose argument and added a quiet argument.
+- Changed the output format to be more readable.
 
-Bugfix
-------
+Bugfixes
+--------
 
 - Bugfix : download the CRC file only when needed.
 
