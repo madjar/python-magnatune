@@ -35,13 +35,19 @@ def update_if_needed():
     check_config_dir()
     db = dbm.open(db_file, 'c')
     try:
-        updated = float(db.get('updated', 0))
+        try:
+            updated = float(db['updated'])
+        except KeyError:
+            updated = 0
         if time.time() - updated < 60 * 60 * 24:  #24 hours
             logger.debug(
                 'Database file updated less than 24 hours, not updating.')
             return
 
-        crc = db.get('crc', None)
+        try:
+            crc = db['crc']
+        except KeyError:
+            crc = None
         logger.info('Updating CRC file')
         new_crc = urllib.request.urlopen(CRC_URL).read()
         db['updated'] = str(time.time())

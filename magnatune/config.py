@@ -25,16 +25,16 @@ class ConfigArgs:
         except configparser.Error as e:
             logger.warning("Error while reading the config file, ignoring :\n%s", e)
 
-        for option in self.config['default']:
-            if option not in ConfigArgs.AUTHORIZED_OPTIONS:
-                logger.warning('Option "%s" in config file will be ignore', option)
+        if self.config.has_section('default'):
+            for option in self.config.options('default'):
+                if option not in ConfigArgs.AUTHORIZED_OPTIONS:
+                    logger.warning('Option "%s" in config file will be ignore', option)
 
     def __getattr__(self, item):
         arg = getattr(self.args, item)
-        if not arg:
+        if not arg and item in ConfigArgs.AUTHORIZED_OPTIONS:
             try:
-                if item in ConfigArgs.AUTHORIZED_OPTIONS:
-                    arg = self.config['default'][item]
-            except KeyError:
+                arg = self.config.get('default', item)
+            except configparser.NoSectionError:
                 pass
         return arg
