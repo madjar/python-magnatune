@@ -10,7 +10,7 @@ import magnatune.api
 logger = logging.getLogger(__name__)
 
 
-HANDLED_ALBUM_ATTRS = {'artist', 'albumname', 'magnatunegenres', 'artistdesc'}
+HANDLED_ALBUM_ATTRS = {'artist', 'albumname', 'magnatunegenres', 'artistdesc', 'albumsku'}
 
 
 def search_album(**kw):

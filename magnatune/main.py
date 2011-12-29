@@ -45,7 +45,7 @@ def main():
     search.add_argument('--albumname', '-n', help='Filter by album name.')
     search.add_argument('--artistdesc', help='Filter by artist description.')
     search.add_argument('--genre', '-g', help='Filter by genre.')
-
+    search.add_argument('--albumid', '-i', help='Filter by album id.')
     args = magnatune.config.ConfigArgs(parser.parse_args())
 
     if args.verbose:
@@ -56,7 +56,7 @@ def main():
         loglevel = logging.INFO
     logging.basicConfig(level=loglevel)
 
-    if not (args.artist or args.albumname or args.genre or args.artistdesc):
+    if not (args.artist or args.albumname or args.genre or args.artistdesc or args.albumid):
         parser.error('no search filter given')
 
     if args.download and not args.login:
@@ -65,7 +65,8 @@ def main():
     for a in magnatune.search.search_album(artist=args.artist,
                                            albumname=args.albumname,
                                            magnatunegenres=args.genre,
-                                           artistdesc=args.artistdesc):
+                                           artistdesc=args.artistdesc,
+                                           albumsku=args.albumid):
         if args.stream:
             format = FORMATS[args.format]
             for t in a.Track:
