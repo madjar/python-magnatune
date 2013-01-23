@@ -15,26 +15,31 @@ def check_config_dir():
 
 
 class ConfigArgs:
-    AUTHORIZED_OPTIONS = ('verbose', 'format', 'dlformat', 'login', 'extract')
+    AUTHORIZED_OPTIONS = {'verbose': False,
+                          'quiet': False,
+                          'format': 'ogg',
+                          'dlformat': 'web',
+                          'login': None,
+                          'extract': None}
 
     def __init__(self, args):
         self.args = args
-        self.config = configparser.ConfigParser()
+        parser = configparser.ConfigParser()
         try:
-            self.config.read(config_file)
+            parser.read(config_file)
+            self.config = parser['magnatune']
         except configparser.Error as e:
             logger.warning("Error while reading the config file, ignoring :\n%s", e)
+            self.config = {}
+        except KeyError:
+            self.config = {}
 
-        if self.config.has_section('default'):
-            for option in self.config.options('default'):
-                if option not in ConfigArgs.AUTHORIZED_OPTIONS:
-                    logger.warning('Option "%s" in config file will be ignore', option)
+        for option in self.config:
+            if option not in ConfigArgs.AUTHORIZED_OPTIONS:
+                logger.warning('Option "%s" in config file will be ignore', option)
 
     def __getattr__(self, item):
         arg = getattr(self.args, item)
         if not arg and item in ConfigArgs.AUTHORIZED_OPTIONS:
-            try:
-                arg = self.config.get('default', item)
-            except configparser.NoSectionError:
-                pass
+            arg = self.config.get(item, ConfigArgs.AUTHORIZED_OPTIONS[item])
         return arg
