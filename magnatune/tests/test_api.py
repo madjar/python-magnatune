@@ -1,5 +1,5 @@
 import unittest
-import mock
+from magnatune.tests import mock
 
 
 class MockDbm(dict):
