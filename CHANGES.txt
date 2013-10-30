@@ -9,7 +9,7 @@ Features
 - Better handling of default value for arguments : less crashes.
 - Changed the config file format : the name of the section is now "magnatune" instead of "default". Remember to update your config files !
 - Moved the config file from `~/.python-magnatune` to `~/.config/python-magnatune`.
-- A lot of performance improvement and code cleaning.
+- A lot of performance improvement and code cleaning, with a lot of dependencies changes.
 
 0.2
 ===

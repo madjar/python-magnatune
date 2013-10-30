@@ -8,6 +8,7 @@ FORMATS = {'ogg': '.ogg',
            'mp3': '.mp3',
            'mp3lofi': '-lofi.mp3'}
 
+# TODO : the arg parsing could be improved
 
 def main():
     parser = argparse.ArgumentParser(description="Search an album.")
@@ -56,6 +57,7 @@ def main():
     else:
         loglevel = logging.INFO
     logging.basicConfig(level=loglevel)
+    logging.getLogger('requests').setLevel(logging.WARNING)
 
     if not (args.artist or args.albumname or args.genre or args.artistdesc or args.albumid):
         parser.error('no search filter given')
