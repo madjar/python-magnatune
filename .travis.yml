@@ -5,5 +5,5 @@ python:
   - 3.3
 install:
   - pip install . --use-mirrors
-  - pip install mock nose --use-mirrors
+  - pip install nose --use-mirrors
 script:  nosetests

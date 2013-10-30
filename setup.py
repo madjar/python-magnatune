@@ -30,6 +30,5 @@ setup(
 
 
     install_requires=['pyxdg', 'requests', 'sqlalchemy'],
-    tests_require=['nose', 'Mock'],
     entry_points={'console_scripts': ['magnatune = magnatune.main:main']}
 )

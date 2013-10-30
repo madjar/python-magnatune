@@ -1,28 +1,13 @@
 import unittest
-from magnatune.tests import mock
 
 
 class TestSearchAlbum(unittest.TestCase):
-    def setUp(self):
-        patcher = mock.patch('magnatune.api.get_database')
-        self.db = patcher.start()()
-        self.addCleanup(patcher.stop)
-
-    def test_searching_with_all_params(self):
-        album = mock.Mock()
-        self.db.getroot().Album = [album]
-
-        album.find().text.lower.return_value = mock.MagicMock()
-        album.find().text.lower().__contains__.return_value = True
-
-        attrs = ('artist', 'albumname', 'magnatunegenres', 'artistdesc')
-        call = {att: att + 'called' for att in attrs}
-
+    def test_search_by_album_name(self):
         from magnatune.search import search_album
-        list(search_album(**call))
+        results = search_album(name='We Are Complex')
 
-        self.assertEqual(album.find().text.lower().__contains__.call_args_list,
-            [((value,), {}) for value in call.values()])
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].artist.name, 'Curl')
 
     def test_wrong_arg(self):
         from magnatune.search import search_album
