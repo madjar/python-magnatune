@@ -1,18 +1,19 @@
 import sys
 import logging
 import requests
+import urllib.parse
 import webbrowser
 import zipfile
 import lxml.etree
-import magnatune.api
+from magnatune.api import get_session, Album, Artist
 
 
 logger = logging.getLogger(__name__)
 
 
-HANDLED_ALBUM_ATTRS = {'artist', 'albumname', 'magnatunegenres', 'artistdesc', 'albumsku'}
+HANDLED_ALBUM_ATTRS = {'artist', 'name', 'genre', 'description', 'sku'}
 
-
+# TODO : I'm not sure this abstraction is usefull
 def search_album(**kw):
     """Searchs for albums matching the arguments."""
     if not HANDLED_ALBUM_ATTRS.issuperset(kw):
@@ -20,13 +21,20 @@ def search_album(**kw):
             'unhandled search on attributes : {0}'
             .format(', '.join(set(kw.keys()).difference(HANDLED_ALBUM_ATTRS))))
 
-    db = magnatune.api.get_database()
-    for a in db.getroot().Album:
-        for attr, value in kw.items():
-            if value and not value.lower() in a.find(attr).text.lower():
-                break
-        else:
-            yield a
+    session = get_session()
+
+    # TODO : case sensitivity might be a problem
+    query = session.query(Album)
+    for attr, value in kw.items():
+        if value:
+            if attr == 'genre':
+                # TODO : useless without a documentation of available genres
+                query = query.filter(Album.genres.contains(value))
+            elif attr == 'artist':
+                query = query.join(Artist).filter(Artist.name.like('%' + value + '%'))
+            else:
+                query = query.filter(getattr(Album, attr).like('%' + value + '%'))
+    return query.all()
 
 
 def auth_url(url, login):
@@ -35,13 +43,15 @@ def auth_url(url, login):
             .replace('.mp3', '_nospeech.mp3').replace('.ogg', '_nospeech.ogg'))
 
 
-def stream_url(track, format, login=None):
-     """Returns a streaming url for given track, in given format with given login."""
-     url = str(track.find(format))
-     if login:
+def stream_url(song, format, login=None):
+    """Returns a streaming url for given track, in given format with given
+    login."""
+    filename = urllib.parse.quote(song.mp3.replace('.mp3', format))
+    url = "http://he3.magnatune.com/all/" + filename
+    if login:
         return auth_url(url, login)
-     else:
-         return url
+    else:
+        return url
 
 
 def download(sku, format, extract=False, login=None):

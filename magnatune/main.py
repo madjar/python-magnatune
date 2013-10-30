@@ -3,9 +3,10 @@ import logging
 import magnatune.search
 import magnatune.config
 
-FORMATS = {'ogg': 'oggurl',
-           'mp3': 'url',
-           'mp3lofi': 'mp3lofi'}
+# TODO : not in the right place
+FORMATS = {'ogg': '.ogg',
+           'mp3': '.mp3',
+           'mp3lofi': '-lofi.mp3'}
 
 
 def main():
@@ -39,7 +40,6 @@ def main():
                         help='The magnatune login and password in the '
                         '"login:passwd" format.')
 
-
     search = parser.add_argument_group('Search arguments')
     search.add_argument('--artist', '-a', help='Filter by artist name.')
     search.add_argument('--albumname', '-n', help='Filter by album name.')
@@ -62,16 +62,17 @@ def main():
     if args.download and not args.login:
         parser.error('cannot download an album without subscription login')
 
-    for a in magnatune.search.search_album(artist=args.artist,
-                                           albumname=args.albumname,
-                                           magnatunegenres=args.genre,
-                                           artistdesc=args.artistdesc,
-                                           albumsku=args.albumid):
+    results = magnatune.search.search_album(artist=args.artist,
+                                            name=args.albumname,
+                                            genre=args.genre,
+                                            description=args.artistdesc,
+                                            sku=args.albumid)
+    for a in results:
         if args.stream:
             format = FORMATS[args.format]
-            for t in a.Track:
-                print(magnatune.search.stream_url(t, format, args.login))
+            for s in a.songs:
+                print(magnatune.search.stream_url(s, format, args.login))
         elif args.download:
-            magnatune.search.download(a.albumsku, args.dlformat, args.extract, args.login)
+            magnatune.search.download(a.sku, args.dlformat, args.extract, args.login)
         else:
-            print(a.artist, '--', a.albumname)
+            print(a.artist.name, '--', a.name)
