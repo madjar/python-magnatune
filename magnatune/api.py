@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-import urllib.request
+import requests
 import os
 import bz2
 import lxml.objectify
@@ -22,9 +22,9 @@ def download():
     """
     Downloads the last version of the api file from the server.
     """
-    source = urllib.request.urlopen(ALBUM_INFO_URL)
+    data = requests.get(ALBUM_INFO_URL).content
     with open(album_info_file, 'wb') as f:
-        f.write(bz2.decompress(source.read()))
+        f.write(bz2.decompress(data))
 
 
 def update_if_needed():
@@ -44,7 +44,7 @@ def update_if_needed():
         crc = None
 
     logger.info('Updating CRC file')
-    new_crc = urllib.request.urlopen(CRC_URL).read()
+    new_crc = requests.get(CRC_URL).content
 
     if crc == new_crc:
         logger.debug('Database file up-to-date.')
