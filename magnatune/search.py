@@ -4,7 +4,7 @@ import requests
 import urllib.parse
 import webbrowser
 import zipfile
-import lxml.etree
+import xml.etree.ElementTree
 from magnatune.api import get_session, Album, Artist
 
 
@@ -66,17 +66,14 @@ def download(sku, format, extract=False, login=None):
            "membership_free_dl_xml?id=python&sku={}".format(sku))
     logger.debug("Downloading %s", url)
 
-    content = requests.get(url, auth=auth).content
-    content = content.replace(b'<br>', b'')  # Workaround because the xml is malformated
-    # TODO : don't use lxml for this one
-    response = lxml.etree.fromstring(content)
+    download_instructions = xml.etree.ElementTree.fromstring(requests.get(url, auth=auth).content)
 
     if format == 'web':
-        url = response.find('DL_PAGE').text
+        url = download_instructions.find('DL_PAGE').text
         print(url)
         webbrowser.open(url)
     else:
-        urlzip = response.find('URL_{}ZIP'.format(format.upper()))
+        urlzip = download_instructions.find('URL_{}ZIP'.format(format.upper()))
         if urlzip is None:
             raise Exception('Unknown download format : %s' % format)
 

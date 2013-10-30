@@ -33,6 +33,7 @@ def main():
     download.add_argument('--dlformat', nargs='?',
                         choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
                         help='The format to use for downloading albums.')
+    # TODO : add opus
     download.add_argument('--extract', '-e', nargs='?', const='.',
                         help='Extract downloaded albums to path (. by default).')
 
