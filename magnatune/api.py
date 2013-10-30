@@ -3,10 +3,9 @@
 import time
 import urllib.request
 import os
-import dbm
 import bz2
 import lxml.objectify
-from magnatune.config import config_dir, check_config_dir
+from magnatune.config import config_dir
 
 import logging
 
@@ -15,7 +14,7 @@ logger = logging.getLogger(__name__)
 CRC_URL = 'http://he3.magnatune.com/info/changed.txt'
 ALBUM_INFO_URL = 'http://he3.magnatune.com/info/album_info_xml.bz2'
 
-db_file = os.path.join(config_dir, 'api.db')
+crc_file = os.path.join(config_dir, 'changed.txt')
 album_info_file = os.path.join(config_dir, 'album_info.xml')
 
 
@@ -32,34 +31,30 @@ def update_if_needed():
     """
     Checks if an update of the api file if needed, and download it if needed.
     """
-    check_config_dir()
-    db = dbm.open(db_file, 'c')
-    try:
-        try:
-            updated = float(db['updated'])
-        except KeyError:
-            updated = 0
+    if os.path.exists(crc_file):
+        updated = os.stat(crc_file).st_mtime
         if time.time() - updated < 60 * 60 * 24:  #24 hours
             logger.debug(
                 'Database file updated less than 24 hours, not updating.')
             return
 
-        try:
-            crc = db['crc']
-        except KeyError:
-            crc = None
-        logger.info('Updating CRC file')
-        new_crc = urllib.request.urlopen(CRC_URL).read()
-        db['updated'] = str(time.time())
-        if crc == new_crc:
-            logger.debug('Database file up-to-date.')
-            return
+        with open(crc_file, 'rb') as f:
+            crc = f.read()
+    else:
+        crc = None
 
-        logger.info('Updating database file.')
-        download()
-        db['crc'] = new_crc
-    finally:
-        db.close()
+    logger.info('Updating CRC file')
+    new_crc = urllib.request.urlopen(CRC_URL).read()
+
+    if crc == new_crc:
+        logger.debug('Database file up-to-date.')
+        return
+
+    logger.info('Updating database file.')
+    download()
+
+    with open(crc_file, 'wb') as f:
+        f.write(new_crc)
 
 
 _db = None

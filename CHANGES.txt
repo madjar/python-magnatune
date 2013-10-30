@@ -5,9 +5,10 @@ Features
 --------
 
 - Added an option to filter by album id.
-- Compatibility with python 3.1
-- Better handling of default value for arguments : less crashes
+- Compatibility with python 3.1.
+- Better handling of default value for arguments : less crashes.
 - Changed the config file format : the name of the section is now "magnatune" instead of "default". Remember to update your config files !
+- A lot of performance improvement and code cleaning.
 
 0.2
 ===
