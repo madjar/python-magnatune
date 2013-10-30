@@ -1,17 +1,13 @@
 import logging
 import os
 import configparser
+from xdg.BaseDirectory import save_config_path
 
 logger = logging.getLogger(__name__)
 
-config_dir = os.path.expanduser('~/.python-magnatune/')
+config_dir = save_config_path('python-magnatune')
+# TODO : use load_config_path for the next one
 config_file = os.path.join(config_dir, 'config.ini')
-
-
-def check_config_dir():
-    """Creates the config dir is needed."""
-    if not os.path.exists(config_dir):
-        os.mkdir(config_dir)
 
 
 class ConfigArgs:

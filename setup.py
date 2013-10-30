@@ -29,7 +29,7 @@ setup(
         ],
 
 
-    install_requires=['lxml'],
+    install_requires=['lxml', 'pyxdg'],
     tests_require=['nose', 'Mock'],
     entry_points={'console_scripts': ['magnatune = magnatune.main:main']}
 )

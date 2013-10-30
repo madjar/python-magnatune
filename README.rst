@@ -41,7 +41,7 @@ To work with the development version, clone the repository at https://github.com
 
 Config file
 ===========
-``python-magnatune`` looks for default values of all arguments in the config file ``~/.python-magnatune/config.ini``. See ``config.ini.example`` for more information.
+``python-magnatune`` looks for default values of all arguments in the config file ``~/.config/python-magnatune/config.ini``. See ``config.ini.example`` for more information.
 
 Contribute
 ==========
