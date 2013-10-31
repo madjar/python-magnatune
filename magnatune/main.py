@@ -3,12 +3,8 @@ import logging
 import magnatune.search
 import magnatune.config
 
-# TODO : not in the right place
-FORMATS = {'ogg': '.ogg',
-           'mp3': '.mp3',
-           'mp3lofi': '-lofi.mp3'}
-
 # TODO : the arg parsing could be improved
+
 
 def main():
     parser = argparse.ArgumentParser(description="Search an album.")
@@ -24,7 +20,8 @@ def main():
                         help='Output the streaming url of the track.')
 
     stream = parser.add_argument_group('Streaming options')
-    stream.add_argument('--format', '-f', nargs='?', choices=FORMATS.keys(),
+    stream.add_argument('--format', '-f', nargs='?',
+                        choices=('ogg', 'mp3', 'mp3lofi'),
                         help='The format to use for streaming url.')
 
     action.add_argument('--download', '-d', action='store_true',
@@ -32,11 +29,11 @@ def main():
 
     download = parser.add_argument_group('Download options')
     download.add_argument('--dlformat', nargs='?',
-                        choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
-                        help='The format to use for downloading albums.')
+                          choices=('web', 'wav', '128kmp3', 'ogg', 'vbr', 'flac'),
+                          help='The format to use for downloading albums.')
     # TODO : add opus
     download.add_argument('--extract', '-e', nargs='?', const='.',
-                        help='Extract downloaded albums to path (. by default).')
+                          help='Extract downloaded albums to path (. by default).')
 
     parser.add_argument('--login', '-l',
                         help='The magnatune login and password in the '
@@ -72,9 +69,8 @@ def main():
                                             sku=args['albumid'])
     for a in results:
         if args['stream']:
-            format = FORMATS[args['format']]
             for s in a.songs:
-                print(magnatune.search.stream_url(s, format, args['login']))
+                print(magnatune.search.stream_url(s, args['format'], args['login']))
         elif args['download']:
             magnatune.search.download(a.sku, args['dlformat'], args['extract'], args['login'])
         else:

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 HANDLED_ALBUM_ATTRS = {'artist', 'name', 'genre', 'description', 'sku'}
 
-# TODO : I'm not sure this abstraction is usefull
+# TODO : I'm not sure this abstraction is useful
 def search_album(**kw):
     """Searchs for albums matching the arguments."""
     if not HANDLED_ALBUM_ATTRS.issuperset(kw):
@@ -23,7 +23,6 @@ def search_album(**kw):
 
     session = get_session()
 
-    # TODO : case sensitivity might be a problem
     query = session.query(Album)
     for attr, value in kw.items():
         if value:
@@ -46,7 +45,10 @@ def auth_url(url, login):
 def stream_url(song, format, login=None):
     """Returns a streaming url for given track, in given format with given
     login."""
-    filename = urllib.parse.quote(song.mp3.replace('.mp3', format))
+    ext = {'ogg': '.ogg',
+           'mp3': '.mp3',
+           'mp3lofi': '-lofi.mp3'}[format]
+    filename = urllib.parse.quote(song.mp3.replace('.mp3', ext))
     url = "http://he3.magnatune.com/all/" + filename
     if login:
         return auth_url(url, login)
