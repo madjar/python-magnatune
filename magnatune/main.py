@@ -48,34 +48,34 @@ def main():
     search.add_argument('--artistdesc', help='Filter by artist description.')
     search.add_argument('--genre', '-g', help='Filter by genre.')
     search.add_argument('--albumid', '-i', help='Filter by album id.')
-    args = magnatune.config.ConfigArgs(parser.parse_args())
+    args = magnatune.config.setdefault_from_config(parser.parse_args())
 
-    if args.verbose:
+    if args['verbose']:
         loglevel = logging.DEBUG
-    elif args.quiet:
+    elif args['quiet']:
         loglevel = logging.WARN
     else:
         loglevel = logging.INFO
     logging.basicConfig(level=loglevel)
     logging.getLogger('requests').setLevel(logging.WARNING)
 
-    if not (args.artist or args.albumname or args.genre or args.artistdesc or args.albumid):
+    if not (args['artist'] or args['albumname'] or args['genre'] or args['artistdesc'] or args['albumid']):
         parser.error('no search filter given')
 
-    if args.download and not args.login:
+    if args['download'] and not args['login']:
         parser.error('cannot download an album without subscription login')
 
-    results = magnatune.search.search_album(artist=args.artist,
-                                            name=args.albumname,
-                                            genre=args.genre,
-                                            description=args.artistdesc,
-                                            sku=args.albumid)
+    results = magnatune.search.search_album(artist=args['artist'],
+                                            name=args['albumname'],
+                                            genre=args['genre'],
+                                            description=args['artistdesc'],
+                                            sku=args['albumid'])
     for a in results:
-        if args.stream:
-            format = FORMATS[args.format]
+        if args['stream']:
+            format = FORMATS[args['format']]
             for s in a.songs:
-                print(magnatune.search.stream_url(s, format, args.login))
-        elif args.download:
-            magnatune.search.download(a.sku, args.dlformat, args.extract, args.login)
+                print(magnatune.search.stream_url(s, format, args['login']))
+        elif args['download']:
+            magnatune.search.download(a.sku, args['dlformat'], args['extract'], args['login'])
         else:
             print(a.artist.name, '--', a.name)
